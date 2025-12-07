@@ -222,8 +222,8 @@ def view_article(request, pk):
 @permission_required('news_app.change_article', raise_exception=True)
 def edit_article(request, pk):
     """
-    Allows an editor or journalist to edit an article. Editors can approve
-    articles.
+    Allows an editor or journalist to edit an article. Editors can
+    approve articles.
     """
     article = get_object_or_404(Article, pk=pk)
     if request.method == 'POST':
@@ -400,8 +400,8 @@ def view_newsletter(request, pk):
 @permission_required('news_app.change_newsletter', raise_exception=True)
 def edit_newsletter(request, pk):
     """
-    Allows an editor or journalist to edit a newsletter. Editors can approve
-    newsletters.
+    Allows an editor or journalist to edit a newsletter. Editors can
+    approve newsletters.
     """
     newsletter = get_object_or_404(Newsletter, pk=pk)
     if request.method == 'POST':
