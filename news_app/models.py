@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class Publisher(models.Model):
     """
-    Represents a publishing house or company.
+    Represents a publishing company or corporate.
     """
     name = models.CharField(max_length=100, unique=True)
 
@@ -15,7 +15,7 @@ class Publisher(models.Model):
 class CustomUser(AbstractUser):
     """
     Custom user model extending Django's AbstractUser.
-    Includes roles (Reader, Journalist, Editor) and fields for
+    Includes roles Reader, Journalist, Editor and fields for
     subscriptions to journalists and publishers.
     """
     ROLE_CHOICES = (
