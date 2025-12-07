@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+<h1>View Article</h1>
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title">{{ article.title }}</h2>
+        <h6 class="card-subtitle mb-2 text-muted">
+            by {{ article.article_author.username }}
+            {% if article.independent_journalist %}
+            (Published by Independent Journalist)
+            {% else %}
+            {{ article.article_author.publisher }}
+            {% endif %}
+        </h6>
+        <p class="card-text">{{ article.content|linebreaks }}</p>
+
+        User options:<br>
+        {% if not article.independent_journalist and user.role == 'Editor' and user.publisher == article.article_author.publisher or user.role == 'Journalist' %}
+            {% if perms.news_app.change_article %}
+                <a href="{% url 'edit_article' article.pk %}" class="btn btn-warning">Edit or Approve Article</a><br>
+            {% endif %}
+            {% if perms.news_app.delete_article %}   
+                <a href="{% url 'delete_article' article.pk %}" class="btn btn-danger">Delete Article</a><br>
+            {% endif %}
+        {% endif %}
+        
+        <a href="{% url 'article_list' %}" class="btn btn-secondary">Back to List</a><br>
+    </div>
+</div><br>
+{% endblock %}

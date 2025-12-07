@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ newsletter.title }}{% endblock %}
+
+{% block content %}
+<h1>View Newsletter</h1>
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title">{{ newsletter.title }}</h2>
+        <h6 class="card-subtitle mb-2 text-muted">
+            by {{ newsletter.newsletter_author.username }}
+            {% if newsletter.independent_journalist %}
+            (Published by Independent Journalist)
+            {% else %}
+            {{ newsletter.newsletter_author.publisher }}
+            {% endif %}
+        </h6>
+        <p class="card-text">{{ newsletter.content|linebreaks }}</p>
+
+        User options:<br>
+        {% if not newsletter.independent_journalist and user.role == 'Editor' and user.publisher == newsletter.newsletter_author.publisher or user.role == 'Journalist' %}
+            {% if perms.news_app.change_article %}
+                <a href="{% url 'edit_newsletter' newsletter.pk %}" class="btn btn-warning">Edit or Approve Newsletter</a><br>
+            {% endif %}
+            {% if perms.news_app.delete_article %}
+                <a href="{% url 'delete_newsletter' newsletter.pk %}" class="btn btn-danger">Delete Newsletter</a><br>
+            {% endif %}
+        {% endif %}
+        <a href="{% url 'article_list' %}" class="btn btn-secondary">Back to List</a><br>
+    </div>
+</div><br>
+{% endblock %}

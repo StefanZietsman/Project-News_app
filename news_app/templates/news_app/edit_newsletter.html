@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Edit or Approve Newsletter{% endblock %}
+
+{% block content %}
+<h2>Edit Newsletter: {{ newsletter.title }}</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    {% if user.is_authenticated and user.role == 'Editor' and not newsletter.independent_journalist %}
+    <div class="form-group">
+        <div class="form-check form-check-reverse">
+            <input class="form-check-input" type="checkbox" name="editor_approved" id="editor_approved" {% if newsletter.editor_approved %}checked{% endif %}>
+            <label class="form-check-label" for="editor_approved">
+                Approve Newsletter
+            </label>
+        </div>
+    </div>
+    {% endif %}<br>
+
+    <button type="submit" class="btn btn-secondary">Update Newsletter</button>
+    <a href="{% url 'article_list' %}" class="btn btn-secondary">Cancel</a>
+</form><br>
+{% endblock %}

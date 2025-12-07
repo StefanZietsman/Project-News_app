@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Add Newsletter{% endblock %}
+
+{% block content %}
+<h2>Add New Newsletter</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    Logged in user: {{ user.username }}<br>
+    Role: {{ user.role }}<br>
+    {{ form.as_p }}
+
+    {% if user.publisher %}
+    <div class="form-group">
+        <p>How would you like to publish this newsletter?</p>
+        <div class="form-check form-check-reverse">
+            <input class="form-check-input" type="radio" name="publish_as" id="publisher" value="publisher" checked>
+            <label class="form-check-label" for="publisher">
+                To publisher {{ user.publisher.name }}
+            </label>
+        </div>
+        <div class="form-check form-check-reverse">
+            <input class="form-check-input" type="radio" name="publish_as" id="independent" value="independent">
+            <label class="form-check-label" for="independent">
+                As an Independent Journalist
+            </label>
+        </div>
+    </div>
+    {% endif %}<br>
+    <button type="submit" class="btn btn-secondary"">Add Newsletter</button>
+</form><br>
+{% endblock %}
