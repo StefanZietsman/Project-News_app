@@ -17,6 +17,8 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
 - [Prerequisites](#prerequisites)
 - [Setup and Installation](#setup-and-installation)
 - [Running the Application](#running-the-application)
+- [Running with Docker](#running-with-docker)
+- [X.com API Configuration](#xcom-api-configuration)
 - [API Endpoints](#api-endpoints)
 
 ## Features
@@ -53,6 +55,21 @@ Follow these steps to get your development environment set up.
     ```
     2.  Install MariaDB from `https://mariadb.org/`.
     3.  Add the `news_app_db` database folder to your MariaDB data path (e.g., `C:\Program Files\MariaDB 12.0\data`).   
+
+## Running with Docker
+
+Alternatively, you can run the application using Docker and Docker Compose for a more isolated and consistent environment.
+
+1.  **Build and run the containers:**
+    Make sure you have Docker installed, then run the following command from the project root:
+    ```bash
+    docker-compose up --build
+    ```
+
+2.  The application will be available at `http://127.0.0.1:8000`.
+
+
+
 
 ## Running the Application
 
@@ -93,6 +110,24 @@ Password: `Password1#`
 Editor: Newsgalore
 Username: `dave`
 Password: `Password1#`
+
+## X.com API Configuration
+
+To enable posting articles to X.com, you need to obtain API credentials from the X Developer Portal.
+
+1.  **Apply for a Developer Account**: Go to the X Developer Platform and apply for a developer account.
+2.  **Create a Project and App**:
+    - Once your account is approved, create a new Project.
+    - Inside your project, create a new App.
+    - During app setup, ensure you enable **"Read and Write"** permissions.
+3.  **Generate Keys and Tokens**:
+    - Navigate to your App's "Keys and tokens" tab.
+    - Generate the **API Key** and **API Key Secret**. These correspond to `CONSUMER_KEY` and `CONSUMER_SECRET` in
+     news_app\finctions\tweet.py.
+4.  **Configure Environment Variables**:
+    - The application is configured to read these keys from environment variables.
+    - If running locally, you can set them in your shell or use a `.env` file.
+
 
 ## API Endpoints
 
