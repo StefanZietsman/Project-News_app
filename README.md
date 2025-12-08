@@ -55,6 +55,7 @@ Follow these steps to get your development environment set up.
     ```
     2.  Install MariaDB from `https://mariadb.org/`.
     3.  Add the `news_app_db` database folder to your MariaDB data path (e.g., `C:\Program Files\MariaDB 12.0\data`).   
+    4.  Run migrations to create the database schema: `python manage.py migrate`
 
 ## Running with Docker
 
@@ -123,7 +124,7 @@ To enable posting articles to X.com, you need to obtain API credentials from the
 3.  **Generate Keys and Tokens**:
     - Navigate to your App's "Keys and tokens" tab.
     - Generate the **API Key** and **API Key Secret**. These correspond to `CONSUMER_KEY` and `CONSUMER_SECRET` in
-     news_app\finctions\tweet.py.
+     `news_app/functions/tweet.py`.
 4.  **Configure Environment Variables**:
     - The application is configured to read these keys from environment variables.
     - If running locally, you can set them in your shell or use a `.env` file.
