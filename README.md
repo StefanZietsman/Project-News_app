@@ -4,9 +4,9 @@ A news application built with Django and Django REST Framework. This project pro
 
 A Reader user can set subscriptions to receive new articles and/or newsletters by email from Publishers and/or Independent Journalists as soon as they are published. A Reader user can retrieve their subscribed articles and/or newsletters via an API endpoint on another device.
 
-A Journalist user can create, update, delete, and view articles and/or newsletters. Once an article and/or newsletter is created under a publisher, the publisher's editor needs to approve it before the item is published. A journalist can independently publish an article/newsletter without a publisher or editor approval, and it will be marked as published by an independent journalist. In the Journalist user's homepage view, the published and "pending editor approval" marked titles are visible.
+A Journalist user can create, update, delete, and view articles and/or newsletters of only related Publisher. Once an article and/or newsletter is created under a publisher, the publisher's editor, related to same Publisher, needs to approve it before the item is published. A journalist can independently publish an article/newsletter without a publisher or editor approval, and it will be marked as published by an independent journalist. In the Journalist user's homepage view, the published and "pending editor approval" marked titles are visible.
 
-An Editor user can only update, delete, and view publisher-created articles and/or newsletters. An Editor can view items that are published and items pending approval. An Editor needs to select an article title to view the item and use the bottom user options to manage and approve the article and/or newsletter. Once the Editor approves and updates the item, it is published.
+An Editor user can only update, delete, and view publisher-created articles and/or newsletters of only related Publisher. An Editor can view items that are published and items pending approval of only related Publisher. An Editor needs to select an article title to view the item and use the bottom user options to manage and approve the article and/or newsletter. Once the Editor approves and updates the item, it is published.
 
 Once an article and/or newsletter is published, it is uploaded to X.com account.
 
