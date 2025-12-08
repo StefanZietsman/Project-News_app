@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:10.6 # Using a specific version for stability
+    container_name: news_app_db
+    restart: always
+    # The environment variables are loaded from the .env file in the root directory
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      # Persist database data
+      - db_data:/var/lib/mysql
+    # Exposing on port 3307 to avoid potential conflicts with a local MariaDB/MySQL instance on 3306.
+    # The 'web' service connects to 'db:3306' internally via the Docker network.
+    ports:
+      - "3307:3306"
+
+  web:
+    build: .
+    container_name: news_app_web
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      # Mount the project directory to the container for live code reloading
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+volumes:
+  db_data:
