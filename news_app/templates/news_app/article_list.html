@@ -9,6 +9,7 @@
     {% if user.is_authenticated %}
     Logged in user: {{ user.username }}<br>
     Role: {{ user.role }}<br>
+    Publisher: {{ user.publisher }}<br>
     {% else %}
     You are not logged in
     {% endif %}

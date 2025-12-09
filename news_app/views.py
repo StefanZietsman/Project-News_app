@@ -222,8 +222,8 @@ def view_article(request, pk):
 @permission_required('news_app.change_article', raise_exception=True)
 def edit_article(request, pk):
     """
-    Allows an editor or author to edit an article. Editors can approve
-    articles.
+    Allows an editor or journalist to edit an article. Editors can
+    approve articles.
     """
     article = get_object_or_404(Article, pk=pk)
     if request.method == 'POST':
@@ -298,7 +298,7 @@ def edit_article(request, pk):
 @permission_required('news_app.delete_article', raise_exception=True)
 def delete_article(request, pk):
     """
-    Allows an author to delete their article.
+    Allows an journalist to delete their article.
     """
     article = get_object_or_404(Article, pk=pk)
     if request.method == 'POST':
@@ -400,8 +400,8 @@ def view_newsletter(request, pk):
 @permission_required('news_app.change_newsletter', raise_exception=True)
 def edit_newsletter(request, pk):
     """
-    Allows an editor or author to edit a newsletter. Editors can approve
-    newsletters.
+    Allows an editor or journalist to edit a newsletter. Editors can
+    approve newsletters.
     """
     newsletter = get_object_or_404(Newsletter, pk=pk)
     if request.method == 'POST':
@@ -476,7 +476,7 @@ def edit_newsletter(request, pk):
 @permission_required('news_app.delete_newsletter', raise_exception=True)
 def delete_newsletter(request, pk):
     """
-    Allows an author to delete their newsletter.
+    Allows an journalist to delete their newsletter.
     """
     newsletter = get_object_or_404(Newsletter, pk=pk)
     if request.method == 'POST':
@@ -597,7 +597,7 @@ def password_reset_confirm(request, uidb64=None, token=None):
 @permission_classes([IsAuthenticated])
 def api_reader_view(request):
     """
-    API endpoint for a 'Reader' to get a list of articles and
+    API endpoint for a 'Reader' to get articles and
     newsletters they are subscribed to.
     """
     user = request.user

@@ -9,8 +9,8 @@ class Tweet():
     #  active.
     _instance = None
     # Consumer keys from your X developer app.
-    CONSUMER_KEY = '4vR6GxOTZYgu1j63dSBlhEds2'
-    CONSUMER_SECRET = 'tUE49zQLaM2bjF9TOixA3rRlVW3xunzKnH6lyNYInwhqE7vuhK'
+    CONSUMER_KEY = ''
+    CONSUMER_SECRET = ''
     # Holds the authenticated OAuth1 session.
     oauth = None
 
