@@ -41,7 +41,7 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
 - **Python 3.9+**
 - **Git**
 - **MariaDB Server**: A locally installed instance of MariaDB.
-- **Docker & Docker Compose**: For the containerized setup.
+- **Docker**: For the containerized setup. [Docker Desktop](https://www.docker.com/products/docker-desktop/) is recommended.
 
 ## Local Development Setup
 
@@ -49,38 +49,33 @@ Follow these steps to run the application on your local machine.
 
 1.  **Clone the Repository**
     ```bash
-    git clone <your-repository-url>
+    git clone <https://github.com/StefanZietsman/Project-News_app>
     cd project_news
     ```
 
 2.  **Create and Activate a Virtual Environment**
     ```bash
     # For Windows
-    python -m venv venv
-    .\venv\Scripts\activate
+    python -m venv .venv
+    \.venv\Scripts\activate
 
     # For macOS/Linux
     python3 -m venv venv
     source venv/bin/activate
     ```
 
-3.  **Configure Environment Variables**
-    - Create a file named `.env` in the project root. This file will store your configuration and secrets.
-    - Copy the contents from the `.env` example in the **Running with Docker** section into your new file.
-    - **Important**: For local setup, update the database credentials in `.env` to match the user and database you create in the next step.
-
-4.  **Set Up the MariaDB Database**
+3.  **Set Up the MariaDB Database**
     - Start your local MariaDB server.
     - Log in to MariaDB as a root user and create the database and a dedicated user for the application.
     ```sql
-    CREATE DATABASE news_app_db;
-    CREATE USER 'news_user'@'localhost' IDENTIFIED BY 'a_strong_password';
-    GRANT ALL PRIVILEGES ON news_app_db.* TO 'news_user'@'localhost';
+    CREATE DATABASE project_news_db;
+    CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';
+    GRANT ALL PRIVILEGES ON project_news_db.* TO 'admin'@'localhost';
     FLUSH PRIVILEGES;
     EXIT;
     ```
 
-5.  **Install Dependencies and Run Migrations**
+4.  **Install Dependencies and Run Migrations**
     ```bash
     # Install Python packages
     pip install -r requirements.txt
@@ -89,7 +84,7 @@ Follow these steps to run the application on your local machine.
     python manage.py migrate
     ```
 
-6.  **Run the Development Server**
+5.  **Run the Development Server**
     ```bash
     python manage.py runserver
     ```
@@ -97,56 +92,86 @@ Follow these steps to run the application on your local machine.
 
 ---
 
-## Running with Docker
+## Running with Docker (without Docker Compose)
 
-You can run the entire application stack (Django and MariaDB) using Docker and Docker Compose for a more isolated and consistent environment.
+You can run the entire application stack using Docker for a consistent development environment. This guide uses standard Docker commands to build and run the application and database containers.
 
 1.  **Prerequisites for Docker:**
-    - Make sure you have Docker and Docker Compose installed on your system.
+    - Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) for your operating system (Windows, macOS, or Linux). Docker Desktop includes Docker Compose, which is required to run the application.
 
 2.  **Environment Configuration:**
-    - Create a file named `.env` in the root of the project (`C:\Users\stefa\Documents\HyperionDev\project_news\.env`).
-    - This file will hold your environment variables. Your `docker-compose.yml` is likely configured to use it. Add the following content, replacing placeholder values with your actual secrets.
+    - Create a file named `.env` in the root of the project.
+    - This file will hold your environment variables. Add the following content, replacing placeholder values with your actual secrets.
     ```
     # Django Settings
     # Generate a new secret key for production. You can use an online generator.
     SECRET_KEY='django-insecure-your-development-secret-key'
     DEBUG=1
+    ALLOWED_HOSTS=127.0.0.1,localhost
 
-    # Database Credentials (for Docker)
-    # The HOST should be 'db' (the service name in docker-compose.yml)
-    DB_HOST=db
+    # --- Database Credentials ---
+    # The DB_HOST must match the network alias of the database container (e.g., 'db-news').
+    DB_HOST=db-news
     MYSQL_DATABASE=news_app_db
     MYSQL_USER=news_user
     MYSQL_PASSWORD=a_strong_password
     MYSQL_ROOT_PASSWORD=a_very_strong_root_password
 
-    # X.com API Credentials (see X.com API Configuration section)
+    # --- X.com API Credentials (see X.com API Configuration section) ---
     CONSUMER_KEY=your_x_com_api_key
     CONSUMER_SECRET=your_x_com_api_key_secret
     ACCESS_TOKEN=your_x_com_access_token
     ACCESS_TOKEN_SECRET=your_x_com_access_token_secret
     ```
 
-3.  **Build and Run the Containers:**
-    - Open a terminal in the project root and run the following command. This will build the images and start the Django and database containers in the background.
+3.  **Create a Docker Network:**
+    - Containers need to be on the same network to communicate. Create a dedicated bridge network for the application.
     ```bash
-    docker-compose up --build -d
+    docker network create news-network
     ```
 
-4.  **Run Database Migrations:**
-    - After the containers have started, run the database migrations to set up the schema.
+4.  **Run the MariaDB Database Container:**
+    - Run the MariaDB container. We will give it a name (`db-news`), attach it to our network, and pass the required database credentials from our `.env` file.
     ```bash
-    docker-compose exec web python manage.py migrate
+    docker run -d \
+      --name db-news \
+      --network news-network \
+      --env-file .env \
+      -v news_db_data:/var/lib/mysql \
+      mariadb:10.6
+    ```
+    *Note: `news_db_data` is a Docker volume that will be created to persist your database data.*
+
+5.  **Build and Run the Django Application Container:**
+    - First, build the Docker image for the Django application using the `Dockerfile`.
+    ```bash
+    docker build -t project-news-app .
+    ```
+    - Next, run the application container, connecting it to the same network as the database.
+    ```bash
+    docker run -d -p 8000:8000 \
+      --name web-news \
+      --network news-network \
+      --env-file .env \
+      project-news-app
     ```
 
-5.  **Access the Application:**
+6.  **Run Database Migrations:**
+    - With the `web-news` container running, execute the `migrate` command inside it to set up the database schema.
+    ```bash
+    docker exec web-news python manage.py migrate
+    ```
+
+7.  **Access the Application:**
     - The application will now be available at `http://127.0.0.1:8000`.
 
-6.  **Stopping the Containers:**
-    - To stop the running containers, use:
+8.  **Stopping and Cleaning Up:**
+    - To stop and remove the containers, network, and volume, run the following commands:
     ```bash
-    docker-compose down
+    docker stop web-news db-news
+    docker rm web-news db-news
+    docker network rm news-network
+    docker volume rm news_db_data
     ```
 
 ## Creating a Superuser
@@ -160,7 +185,7 @@ To access the Django admin panel at `/admin/`, you need to create a superuser.
 
 *   **For Docker:**
     ```bash
-    docker-compose exec web python manage.py createsuperuser
+    docker exec -it web-news python manage.py createsuperuser
     ```
 
 Follow the prompts to set a username, email, and password.

@@ -1,20 +1,22 @@
-# Git
+# .dockerignore
+
+# Git files
 .git
 .gitignore
 
-# Docker
-.dockerignore
+# Docker files
 Dockerfile
+.dockerignore
 
-# IDE and editor files
-.idea/
-.vscode/
-
-# Python cache
-__pycache__
+# Python virtual environment and cache
+.venv
+__pycache__/
 *.pyc
 
-# Local environment
-.env
-venv/
-env/
+# Node.js dependencies
+node_modules
+
+# IDE and OS files
+.idea/
+.vscode/
+*.DS_Store
