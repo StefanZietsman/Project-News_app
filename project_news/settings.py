@@ -78,15 +78,8 @@ WSGI_APPLICATION = 'project_news.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'project_news_db',
-        'USER': 'admin',
-        'PASSWORD': 'password',
-        'HOST': '127.0.0.1',  # Or 'localhost'
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

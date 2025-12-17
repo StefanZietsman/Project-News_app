@@ -6,10 +6,10 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the requirements file into the container.
-COPY requirements.txt .
+COPY requirements.txt requirements.txt
 
-# Install the packages listed in requirements.txt.
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
+RUN python manage.py migrate
 
 # Copy the rest of your application's source code into the container.
 COPY . .
@@ -17,6 +17,5 @@ COPY . .
 # Expose the port the app runs on.
 EXPOSE 8000
 
-# Run the Django development server.
-# This is great for development but should be replaced with Gunicorn for production.
+# Run the Django development server
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
