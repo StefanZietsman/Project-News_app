@@ -12,9 +12,10 @@ COPY requirements.txt requirements.txt
 
 # Install system dependencies required for mysqlclient
 RUN apt-get update && apt-get install -y \
-    pkg-config \
+    pkg-config \    
     gcc \
-    default-libmysqlclient-dev
+    libmariadb-dev-compat
+
 # Install dependencies
 RUN pip install -r requirements.txt
 

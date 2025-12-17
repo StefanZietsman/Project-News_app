@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth import models as auth_models
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
@@ -74,6 +75,58 @@ def register_user(request):
             group, created = (
                 auth_models.Group.objects.get_or_create(name=user.role))
             group.user_set.add(user)
+
+            # If a new Journalist group is created, assign permissions
+            if user.role == 'Journalist' and created:
+                journalist_permissions_codenames = [
+                    "add_article", "view_article", "change_article",
+                    "delete_article", "add_newsletter", "view_newsletter",
+                    "change_newsletter", "delete_newsletter",
+                ]
+                # Get the content types for the models
+                article_ct = ContentType.objects.get_for_model(Article)
+                newsletter_ct = ContentType.objects.get_for_model(Newsletter)
+
+                # Get all relevant permissions
+                permissions = auth_models.Permission.objects.filter(
+                    content_type__in=[article_ct, newsletter_ct],
+                    codename__in=journalist_permissions_codenames
+                )
+                group.permissions.set(permissions)
+
+            # If a new Editor group is created, assign permissions
+            elif user.role == 'Editor' and created:
+                editor_permissions_codenames = [
+                    "view_article", "change_article", "delete_article",
+                    "view_newsletter", "change_newsletter",
+                    "delete_newsletter",
+                ]
+                # Get the content types for the models
+                article_ct = ContentType.objects.get_for_model(Article)
+                newsletter_ct = ContentType.objects.get_for_model(Newsletter)
+
+                # Get all relevant permissions
+                permissions = auth_models.Permission.objects.filter(
+                    content_type__in=[article_ct, newsletter_ct],
+                    codename__in=editor_permissions_codenames)
+                group.permissions.set(permissions)
+
+            # If a new Reader group is created, assign permissions
+            elif user.role == 'Reader' and created:
+                reader_permissions_codenames = [
+                    "view_article", "view_newsletter",
+                ]
+                # Get the content types for the models
+                article_ct = ContentType.objects.get_for_model(Article)
+                newsletter_ct = ContentType.objects.get_for_model(Newsletter)
+
+                # Get all relevant permissions
+                permissions = auth_models.Permission.objects.filter(
+                    content_type__in=[article_ct, newsletter_ct],
+                    codename__in=reader_permissions_codenames
+                )
+                group.permissions.set(permissions)
+
             messages.success(
                 request, 'Registration successful. You can now log in.')
             return redirect('article_list')

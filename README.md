@@ -105,33 +105,38 @@ To enable posting articles to X.com, you need to obtain API credentials from the
 4.  **Configure Environment Variables**:
     - Add the generated keys and tokens to your `.env` file as shown in the configuration sections above. The application is configured to read these keys from this file.
 
-## Test Users
+## Docker Desktop setup
 
-The following users have been created for testing purposes. You can create them by running migrations if they are included in a data migration file, or create them manually.
+1. docker build -t project-news .
 
-**Journalist: Planetnews**
-- Username: `john`
-- Password: `Password1#`
+docker network create news-network
+docker run -d \
+    --name mariadb-db \
+    --network news-network \
+    -v mariadb_data:/var/lib/mysql \
+    -e MARIADB_ROOT_PASSWORD=a_very_secret_password \
+    -e MARIADB_DATABASE=project_news_db \
+    -e MARIADB_USER=admin \
+    -e MARIADB_PASSWORD=password \
+    mariadb:latest
 
-**Editor: Planetnews**
-- Username: `tom`
-- Password: `Password1#`
+docker run -d \
+    -p 8000:8000 \
+    --name project-news-app \
+    --network news-network \
+    -e DB_HOST=mariadb-db \
+    project-news
 
-**Reader with subscriptions:**
-- Username: `sue`
-- Password: `Password1#`
+python manage.py collectstatic
 
-**Reader without subscriptions:**
-- Username: `betty`
-- Password:`Password1#`
+# Apply database migrations
+    python manage.py migrate
 
-**Journalist: Newsgalore**
-- Username: `gill`
-- Password: `Password1#`
+## Creating a Superuser
+    -python manage.py createsuperuser
+    -Follow and complete required inputs
 
-**Editor: Newsgalore**
-- Username: `dave`
-- Password: `Password1#`
+run app http://127.0.0.1:8000
 
 ## API Endpoints
 
