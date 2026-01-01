@@ -58,10 +58,6 @@ Follow these steps to run the application on your local machine.
     # For Windows
     python -m venv .venv
     \.venv\Scripts\activate
-
-    # For macOS/Linux
-    python3 -m venv venv
-    source venv/bin/activate
     ```
 
 3.  **Set Up the MariaDB Database**
@@ -110,6 +106,7 @@ To enable posting articles to X.com, you need to obtain API credentials from the
 1. docker build -t project-news .
 
 docker network create news-network
+
 docker run -d \
     --name mariadb-db \
     --network news-network \
@@ -122,11 +119,12 @@ docker run -d \
 
 docker run -d \
     -p 8000:8000 \
-    --name project-news-app \
+    --name project-news_app \
     --network news-network \
     -e DB_HOST=mariadb-db \
-    project-news
+    project-news:latest
 
+In exec tab
 python manage.py collectstatic
 
 # Apply database migrations
@@ -142,3 +140,4 @@ run app http://127.0.0.1:8000
 
 The API endpoint for a Reader to receive their subscribed articles and/or newsletters:
 - `GET http://127.0.0.1:8000/api/reader_view/`
+Unit tests to test the third-party RESTful API done in news_app\tests_api.py file.
