@@ -22,7 +22,7 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
 
 ## Features
 
-- **RESTful API**: Retrive subscribed articles and newsletters via api for readers.
+- **RESTful API**: Retrieve subscribed articles and newsletters via api for readers.
 - **Custom User Model**: Extends Django's default user model to include roles and other application-specific fields.
 - **Admin Interface**: Django Admin is configured for easy management of app data.
 - **Role-Based Permissions**: Custom permissions for Reader, Journalist, and Editor roles.
@@ -42,24 +42,23 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
 - **Docker**: For the containerized setup. [Docker Desktop](https://www.docker.com/products/docker-desktop/) is recommended.
 
 ## Local Development Setup
-    Follow these steps to run the application on your local machine using Visual Studio Code.
+Follow these steps to run the application on your local machine using Visual Studio Code.
 
 1.  **Clone the Repository**
 ```bash
-    git clone <https://github.com/StefanZietsman/Project-News_app>
+    git clone https://github.com/StefanZietsman/Project-News_app
     cd project_news
 ```
 
 2.  **Create and Activate a Virtual Environment**
 ```bash
-    # For Windows
     python -m venv .venv
     \.venv\Scripts\activate
 ```
 
 3.  **Set Up the MariaDB Database**
-    - Start your local MariaDB server.
-    - Log in to MariaDB as a root user and create the database and a dedicated user for the application.
+- Start your local MariaDB server.
+- Log in to MariaDB as a root user and create the database and a dedicated user for the application.
 ```bash 
     CREATE DATABASE project_news_db;
     CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';
@@ -68,35 +67,35 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
     EXIT;
 ```
 
-4.  **Install Dependencies and Run Migrations**
-    In terminal run these commands:
-    - Install requirements.
+4.  **Install Dependencies and Run Migrations.**
+In terminal run these commands:
+- Install requirements.
 ```bash
     pip install -r requirements.txt
 ```
-    - Collect static files
+- Collect static files
 ```bash
     python manage.py collectstatic
 ```
-    Type 'yes' to overwrite existing files
+Type 'yes' to overwrite existing files
 
-    - Apply database migrations
+- Apply database migrations
 ```bash
     python manage.py migrate
 ```
-    - Create a Superuser
+- Create a Superuser
 ```bash
     python manage.py createsuperuser
 ```
-    Follow and complete required inputs
+Follow and complete required inputs
 
 
 5.  **Run the Development Server**
-    In terminal run command:
+- In terminal run command:
 ```bash
     python manage.py runserver
 ```
-    The application will be available at `http://127.0.0.1:8000` using your web browser.
+The application will be available at `http://127.0.0.1:8000` using your web browser.
 
 ## X.com API Configuration
 
@@ -114,7 +113,7 @@ To enable posting articles to X.com, you need to obtain API credentials from the
     - Add the generated keys and tokens to your `.env` file as shown in the configuration sections above. The application is configured to read these keys from this file.
 
 ## App setup for Docker Desktop
-    Make sure Docker Desktop is running. In Visual Studio Code terminal run docker commands:
+- Make sure Docker Desktop is running. In Visual Studio Code terminal run docker commands:
 
 1. **Build the image:**
 ```bash
@@ -123,7 +122,7 @@ To enable posting articles to X.com, you need to obtain API credentials from the
 
 2. **Run MariaDB image in a container:**
 ```bash
-docker run -d
+    docker run -d
     --name mariadb-db
     --network news-network
     -v mariadb_data:/var/lib/mysql
@@ -136,7 +135,7 @@ docker run -d
 
 3. **Run project-news app image in another container:**
 ```bash
-docker run -d
+    docker run -d
     -p 8000:8000
     --name project-news_app
     --network news-network
@@ -145,21 +144,21 @@ docker run -d
 ```
 
 4. **In Docker Desktop, container project-news, tab Exec, run the following commands:**
-    - Collect static files
+- Collect static files
 ```bash
-python manage.py collectstatic
+    python manage.py collectstatic
 ```
 Type 'yes' to overwrite existing files
 
-    - Apply database migrations
+- Apply database migrations
 ```bash
-python manage.py migrate
+    python manage.py migrate
 ```
-    - Create a Superuser
+- Create a Superuser
 ```bash
-python manage.py createsuperuser
+    python manage.py createsuperuser
 ```
-    Follow and complete required inputs
+Follow and complete required inputs
 
 App should be running and can be found at `http://127.0.0.1:8000` using your web browser.
 To get to Django administration page, go to `http://127.0.0.1:8000/admin`.
