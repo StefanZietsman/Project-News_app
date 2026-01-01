@@ -16,15 +16,13 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
 - [Technology Stack](#technology-stack)
 - [Prerequisites](#prerequisites)
 - [Local Development Setup](#local-development-setup)
-- [Running with Docker](#running-with-docker)
-- [Creating a Superuser](#creating-a-superuser)
 - [X.com API Configuration](#xcom-api-configuration)
-- [Test Users](#test-users)
+- [App setup for Docker Desktop](#app-setup-for-docker-desktop)
 - [API Endpoints](#api-endpoints)
 
 ## Features
 
-- **RESTful API**: A complete API for CRUD (Create, Read, Update, Delete) operations on news articles and newsletters.
+- **RESTful API**: Retrive subscribed articles and newsletters via api for readers.
 - **Custom User Model**: Extends Django's default user model to include roles and other application-specific fields.
 - **Admin Interface**: Django Admin is configured for easy management of app data.
 - **Role-Based Permissions**: Custom permissions for Reader, Journalist, and Editor roles.
@@ -44,47 +42,61 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
 - **Docker**: For the containerized setup. [Docker Desktop](https://www.docker.com/products/docker-desktop/) is recommended.
 
 ## Local Development Setup
-
-Follow these steps to run the application on your local machine.
+    Follow these steps to run the application on your local machine using Visual Studio Code.
 
 1.  **Clone the Repository**
-    ```bash
+```bash
     git clone <https://github.com/StefanZietsman/Project-News_app>
     cd project_news
-    ```
+```
 
 2.  **Create and Activate a Virtual Environment**
-    ```bash
+```bash
     # For Windows
     python -m venv .venv
     \.venv\Scripts\activate
-    ```
+```
 
 3.  **Set Up the MariaDB Database**
     - Start your local MariaDB server.
     - Log in to MariaDB as a root user and create the database and a dedicated user for the application.
-    ```sql
+```bash 
     CREATE DATABASE project_news_db;
     CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';
     GRANT ALL PRIVILEGES ON project_news_db.* TO 'admin'@'localhost';
     FLUSH PRIVILEGES;
     EXIT;
-    ```
+```
 
 4.  **Install Dependencies and Run Migrations**
-    ```bash
-    # Install Python packages
+    In terminal run these commands:
+    - Install requirements.
+```bash
     pip install -r requirements.txt
+```
+    - Collect static files
+```bash
+    python manage.py collectstatic
+```
+    Type 'yes' to overwrite existing files
 
-    # Apply database migrations
+    - Apply database migrations
+```bash
     python manage.py migrate
-    ```
+```
+    - Create a Superuser
+```bash
+    python manage.py createsuperuser
+```
+    Follow and complete required inputs
+
 
 5.  **Run the Development Server**
-    ```bash
+    In terminal run command:
+```bash
     python manage.py runserver
-    ```
-    The application will be available at `http://127.0.0.1:8000`.
+```
+    The application will be available at `http://127.0.0.1:8000` using your web browser.
 
 ## X.com API Configuration
 
@@ -101,43 +113,59 @@ To enable posting articles to X.com, you need to obtain API credentials from the
 4.  **Configure Environment Variables**:
     - Add the generated keys and tokens to your `.env` file as shown in the configuration sections above. The application is configured to read these keys from this file.
 
-## Docker Desktop setup
+## App setup for Docker Desktop
+    Make sure Docker Desktop is running. In Visual Studio Code terminal run docker commands:
 
-1. docker build -t project-news .
+1. **Build the image:**
+```bash
+    docker build -t project-news .
+```
 
-docker network create news-network
-
-docker run -d \
-    --name mariadb-db \
-    --network news-network \
-    -v mariadb_data:/var/lib/mysql \
-    -e MARIADB_ROOT_PASSWORD=a_very_secret_password \
-    -e MARIADB_DATABASE=project_news_db \
-    -e MARIADB_USER=admin \
-    -e MARIADB_PASSWORD=password \
+2. **Run MariaDB image in a container:**
+```bash
+docker run -d
+    --name mariadb-db
+    --network news-network
+    -v mariadb_data:/var/lib/mysql
+    -e MARIADB_ROOT_PASSWORD=a_very_secret_password
+    -e MARIADB_DATABASE=project_news_db
+    -e MARIADB_USER=admin
+    -e MARIADB_PASSWORD=password
     mariadb:latest
+```
 
-docker run -d \
-    -p 8000:8000 \
-    --name project-news_app \
-    --network news-network \
-    -e DB_HOST=mariadb-db \
+3. **Run project-news app image in another container:**
+```bash
+docker run -d
+    -p 8000:8000
+    --name project-news_app
+    --network news-network
+    -e DB_HOST=mariadb-db
     project-news:latest
+```
 
-In exec tab
+4. **In Docker Desktop, container project-news, tab Exec, run the following commands:**
+    - Collect static files
+```bash
 python manage.py collectstatic
+```
+Type 'yes' to overwrite existing files
 
-# Apply database migrations
-    python manage.py migrate
+    - Apply database migrations
+```bash
+python manage.py migrate
+```
+    - Create a Superuser
+```bash
+python manage.py createsuperuser
+```
+    Follow and complete required inputs
 
-## Creating a Superuser
-    -python manage.py createsuperuser
-    -Follow and complete required inputs
-
-run app http://127.0.0.1:8000
+App should be running and can be found at `http://127.0.0.1:8000` using your web browser.
+To get to Django administration page, go to `http://127.0.0.1:8000/admin`.
 
 ## API Endpoints
 
 The API endpoint for a Reader to receive their subscribed articles and/or newsletters:
-- `GET http://127.0.0.1:8000/api/reader_view/`
+`GET http://127.0.0.1:8000/api/reader_view/`
 Unit tests to test the third-party RESTful API done in news_app\tests_api.py file.
