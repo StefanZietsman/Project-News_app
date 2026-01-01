@@ -46,46 +46,46 @@ Follow these steps to run the application on your local machine using Visual Stu
 
 1.  **Clone the Repository**
 ```bash
-    git clone https://github.com/StefanZietsman/Project-News_app
-    cd project_news
+git clone https://github.com/StefanZietsman/Project-News_app
+cd project_news
 ```
 
 2.  **Create and Activate a Virtual Environment**
 ```bash
-    python -m venv .venv
-    \.venv\Scripts\activate
+python -m venv .venv
+\.venv\Scripts\activate
 ```
 
 3.  **Set Up the MariaDB Database**
 - Start your local MariaDB server.
 - Log in to MariaDB as a root user and create the database and a dedicated user for the application.
 ```bash 
-    CREATE DATABASE project_news_db;
-    CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';
-    GRANT ALL PRIVILEGES ON project_news_db.* TO 'admin'@'localhost';
-    FLUSH PRIVILEGES;
-    EXIT;
+CREATE DATABASE project_news_db;
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON project_news_db.* TO 'admin'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
 ```
 
 4.  **Install Dependencies and Run Migrations.**
 In terminal run these commands:
 - Install requirements.
 ```bash
-    pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 - Collect static files
 ```bash
-    python manage.py collectstatic
+python manage.py collectstatic
 ```
 Type 'yes' to overwrite existing files
 
 - Apply database migrations
 ```bash
-    python manage.py migrate
+python manage.py migrate
 ```
 - Create a Superuser
 ```bash
-    python manage.py createsuperuser
+python manage.py createsuperuser
 ```
 Follow and complete required inputs
 
@@ -93,7 +93,7 @@ Follow and complete required inputs
 5.  **Run the Development Server**
 - In terminal run command:
 ```bash
-    python manage.py runserver
+python manage.py runserver
 ```
 The application will be available at `http://127.0.0.1:8000` using your web browser.
 
@@ -117,46 +117,46 @@ To enable posting articles to X.com, you need to obtain API credentials from the
 
 1. **Build the image:**
 ```bash
-    docker build -t project-news .
+docker build -t project-news .
 ```
 
 2. **Run MariaDB image in a container:**
 ```bash
-    docker run -d
-    --name mariadb-db
-    --network news-network
-    -v mariadb_data:/var/lib/mysql
-    -e MARIADB_ROOT_PASSWORD=a_very_secret_password
-    -e MARIADB_DATABASE=project_news_db
-    -e MARIADB_USER=admin
-    -e MARIADB_PASSWORD=password
-    mariadb:latest
+docker run -d
+--name mariadb-db
+--network news-network
+-v mariadb_data:/var/lib/mysql
+-e MARIADB_ROOT_PASSWORD=a_very_secret_password
+-e MARIADB_DATABASE=project_news_db
+-e MARIADB_USER=admin
+-e MARIADB_PASSWORD=password
+mariadb:latest
 ```
 
 3. **Run project-news app image in another container:**
 ```bash
-    docker run -d
-    -p 8000:8000
-    --name project-news_app
-    --network news-network
-    -e DB_HOST=mariadb-db
-    project-news:latest
+docker run -d
+-p 8000:8000
+--name project-news_app
+--network news-network
+-e DB_HOST=mariadb-db
+project-news:latest
 ```
 
 4. **In Docker Desktop, container project-news, tab Exec, run the following commands:**
 - Collect static files
 ```bash
-    python manage.py collectstatic
+python manage.py collectstatic
 ```
 Type 'yes' to overwrite existing files
 
 - Apply database migrations
 ```bash
-    python manage.py migrate
+python manage.py migrate
 ```
 - Create a Superuser
 ```bash
-    python manage.py createsuperuser
+python manage.py createsuperuser
 ```
 Follow and complete required inputs
 
