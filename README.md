@@ -22,7 +22,7 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
 
 ## Features
 
-- **RESTful API**: Retrive subscribed articles and newsletters via api for readers.
+- **RESTful API**: Retrieve subscribed articles and newsletters via api for readers.
 - **Custom User Model**: Extends Django's default user model to include roles and other application-specific fields.
 - **Admin Interface**: Django Admin is configured for easy management of app data.
 - **Role-Based Permissions**: Custom permissions for Reader, Journalist, and Editor roles.
@@ -42,11 +42,11 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
 - **Docker**: For the containerized setup. [Docker Desktop](https://www.docker.com/products/docker-desktop/) is recommended.
 
 ## Local Development Setup
-    Follow these steps to run the application on your local machine using Visual Studio Code.
+Follow these steps to run the application on your local machine using Visual Studio Code.
 
 1.  **Clone the Repository**
 ```bash
-    git clone <https://github.com/StefanZietsman/Project-News_app>
+    git clone https://github.com/StefanZietsman/Project-News_app
     cd project_news
 ```
 
@@ -68,34 +68,34 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
     EXIT;
 ```
 
-4.  **Install Dependencies and Run Migrations**
+4.  **Install Dependencies and Run Migrations.**
     In terminal run these commands:
     - Install requirements.
-```bash
+    ```bash
     pip install -r requirements.txt
-```
+    ```
     - Collect static files
-```bash
+    ```bash
     python manage.py collectstatic
-```
+    ```
     Type 'yes' to overwrite existing files
 
     - Apply database migrations
-```bash
+    ```bash
     python manage.py migrate
-```
+    ```
     - Create a Superuser
-```bash
+    ```bash
     python manage.py createsuperuser
-```
+    ```
     Follow and complete required inputs
 
 
 5.  **Run the Development Server**
     In terminal run command:
-```bash
+    ```bash
     python manage.py runserver
-```
+    ```
     The application will be available at `http://127.0.0.1:8000` using your web browser.
 
 ## X.com API Configuration
