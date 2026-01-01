@@ -113,7 +113,7 @@ To enable posting articles to X.com, you need to obtain API credentials from the
     - Add the generated keys and tokens to your `.env` file as shown in the configuration sections above. The application is configured to read these keys from this file.
 
 ## App setup for Docker Desktop
-    Make sure Docker Desktop is running. In Visual Studio Code terminal run docker commands:
+- Make sure Docker Desktop is running. In Visual Studio Code terminal run docker commands:
 
 1. **Build the image:**
 ```bash
