@@ -123,24 +123,24 @@ docker build -t project-news .
 2. **Run MariaDB image in a container:**
 ```bash
 docker run -d
---name mariadb-db
---network news-network
--v mariadb_data:/var/lib/mysql
--e MARIADB_ROOT_PASSWORD=a_very_secret_password
--e MARIADB_DATABASE=project_news_db
--e MARIADB_USER=admin
--e MARIADB_PASSWORD=password
-mariadb:latest
+    --name mariadb-db
+    --network news-network
+    -v mariadb_data:/var/lib/mysql
+    -e MARIADB_ROOT_PASSWORD=a_very_secret_password
+    -e MARIADB_DATABASE=project_news_db
+    -e MARIADB_USER=admin
+    -e MARIADB_PASSWORD=password
+    mariadb:latest
 ```
 
 3. **Run project-news app image in another container:**
 ```bash
 docker run -d
--p 8000:8000
---name project-news_app
---network news-network
--e DB_HOST=mariadb-db
-project-news:latest
+    -p 8000:8000
+    --name project-news_app
+    --network news-network
+    -e DB_HOST=mariadb-db
+    project-news:latest
 ```
 
 4. **In Docker Desktop, container project-news, tab Exec, run the following commands:**
