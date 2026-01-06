@@ -18,11 +18,12 @@ Once an article and/or newsletter is published, it is uploaded to X.com account.
 - [Local Development Setup](#local-development-setup)
 - [X.com API Configuration](#xcom-api-configuration)
 - [App setup for Docker Desktop](#app-setup-for-docker-desktop)
-- [API Endpoints](#api-endpoints)
+- [API Endpoint](#api-endpoint)
+- [Documentation](#documentation)
 
 ## Features
 
-- **RESTful API**: Retrieve subscribed articles and newsletters via api for readers.
+- **RESTful API**: Retrieve subscribed articles and newsletters via API for readers.
 - **Custom User Model**: Extends Django's default user model to include roles and other application-specific fields.
 - **Admin Interface**: Django Admin is configured for easy management of app data.
 - **Role-Based Permissions**: Custom permissions for Reader, Journalist, and Editor roles.
@@ -163,10 +164,21 @@ Follow and complete required inputs
 App should be running and can be found at `http://127.0.0.1:8000` using your web browser.
 To get to Django administration page, go to `http://127.0.0.1:8000/admin`.
 
-## API Endpoints
+## API Endpoint
 
-Only a registered Reader role can access their subscribed articles and newsletters via API endpont.
-The Reader role username and password
-The API endpoint for a Reader to receive their subscribed articles and/or newsletters:
-`GET http://127.0.0.1:8000/api/reader_view/`
+Only a registered Reader role can access their subscribed articles and newsletters via API endpoint.
+You can test the API using Postman.
+
+**Authentication**: Use Basic Auth with a Reader role user's 'Username' and 'Password'.
+
+**Retrieve Subscribed Articles and Newsletters**:
+
+-   **Method**: `GET`
+-   **URL**: `GET http://127.0.0.1:8000/api/reader_view/`
+-   **Body** (raw, JSON):
+
 Unit tests to test the third-party RESTful API done in news_app\tests_api.py file.
+
+## Documentation
+
+- Documentation regarding the app can be found at \docs\_build\html\index.html using your web browser.
