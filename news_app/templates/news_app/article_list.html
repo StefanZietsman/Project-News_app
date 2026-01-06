@@ -27,11 +27,17 @@
     {% for article in article_list %}
     {% if article.editor_approved or user.role == 'Editor' and user.publisher == article.article_author.publisher or article.article_author == user or article.independent_journalist %}
     <li>
+        {% if user.role == 'Reader' or not article.editor_approved and not article.independent_journalist %}
         <a href="{% url 'view_article' article.pk %}">
             <div>
                 <h5>{{ article.title }}</h5>
             </div>
         </a>
+        {% else %}
+        <div>
+            <h5>{{ article.title }}</h5>
+        </div>
+        {% endif %}
         <small>by {{ article.article_author.username }} {% if article.independent_journalist %} (Published by Independent Journalist) {% endif %}
             {% if not article.independent_journalist %}
                 {% if not article.editor_approved %}
@@ -54,11 +60,17 @@
     {% for newsletter in newsletter_list %}
     {% if newsletter.editor_approved or user.role == 'Editor' and user.publisher == newsletter.newsletter_author.publisher or newsletter.newsletter_author == user or newsletter.independent_journalist %}
     <li>
+        {% if user.role == 'Reader' or not newsletter.editor_approved and not newsletter.independent_journalist %}
         <a href="{% url 'view_newsletter' newsletter.pk %}">
             <div>
                 <h5>{{ newsletter.title }}</h5>
             </div>
         </a>
+        {% else %}
+        <div>
+            <h5>{{ newsletter.title }}</h5>
+        </div>
+        {% endif %}
         <small>by {{ newsletter.newsletter_author.username }} {% if newsletter.independent_journalist %} (Published by Independent Journalist) {% endif %}
             {% if not newsletter.independent_journalist %}
             {% if not newsletter.editor_approved %}
@@ -78,25 +90,27 @@
 
 {% if user.role == 'Reader' %}
 <h1>Subscriptions</h1>
-<ul>
     <h2>Journalists:</h2>
+    <p>
     {% for journalist in user.subscribed_journalists.all %}
         {{ journalist.username }}
         {% if not forloop.last %}, 
         {% endif %}
         {% empty %}
             None
-    {% endfor %}<br>
+    {% endfor %}
+    </p>
     <h2>Publishers:</h2>
+    <p>
         {% for publisher in user.subscribed_publishers.all %}
         {{ publisher.name }}
         {% if not forloop.last %},
         {% endif %}
         {% empty %}
             None
-    {% endfor %}<br>
+    {% endfor %}
+    </p>
 {% endif %}
-</ul>
 <p>
     User options:<br>
     {% if not user.is_authenticated %}

@@ -165,6 +165,8 @@ To get to Django administration page, go to `http://127.0.0.1:8000/admin`.
 
 ## API Endpoints
 
+Only a registered Reader role can access their subscribed articles and newsletters via API endpont.
+The Reader role username and password
 The API endpoint for a Reader to receive their subscribed articles and/or newsletters:
 `GET http://127.0.0.1:8000/api/reader_view/`
 Unit tests to test the third-party RESTful API done in news_app\tests_api.py file.
